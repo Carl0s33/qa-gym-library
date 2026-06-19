@@ -50,9 +50,20 @@ public class LibraryService {
         return result;
     }
 
-    public List<Book> findBooksByAuthor(String author) {
-        // TODO: implementar busca por autor
-        return List.of();
+    public List<Book> findBooksByAuthor(String author){
+        if (author == null) {
+            return List.of();
+        }
+
+        List<Book> result = new ArrayList<>();
+
+        for (Book book : books) {
+            if (book.getAuthor().equalsIgnoreCase(author)) {
+                result.add(book);
+            }
+        }
+
+        return result;
     }
 
     public int countBooks() {
