@@ -20,31 +20,34 @@ class LoanTest {
 
     @Test
     void deveRetornarMultaZeroQuandoDevolvidoNoPrazo() {
-        Loan loan = new Loan(book, user, LocalDate.now());
+        LocalDate hoje = LocalDate.of(2026, 6, 20);
+        Loan loan = new Loan(book, user, hoje);
         
-        double multa = loan.calculateFine(LocalDate.now());
+        double multa = loan.calculateFine(hoje);
         
         assertThat(multa).isEqualTo(0.0);
     }
 
     @Test
     void deveCalcularMultaQuandoHouverAtraso() {
-        LocalDate dataEmprestimo = LocalDate.now().minusDays(20);
+        LocalDate hoje = LocalDate.of(2026, 6, 20);
+        LocalDate dataEmprestimo = hoje.minusDays(20);
         Loan loan = new Loan(book, user, dataEmprestimo);
         
-        double multa = loan.calculateFine(LocalDate.now());
+        double multa = loan.calculateFine(hoje);
         
         assertThat(multa).isEqualTo(3.0);
     }
     
     @Test
     void deveTravarMultaNaDataDeDevolucao() {
-        LocalDate dataEmprestimo = LocalDate.now().minusDays(20);
+        LocalDate hoje = LocalDate.of(2026, 6, 20);
+        LocalDate dataEmprestimo = hoje.minusDays(20);
         Loan loan = new Loan(book, user, dataEmprestimo);
         
-        loan.setReturnDate(LocalDate.now()); 
+        loan.setReturnDate(hoje); 
         
-        double multa = loan.calculateFine(LocalDate.now().plusDays(10));
+        double multa = loan.calculateFine(hoje.plusDays(10));
 
         assertThat(multa).isEqualTo(3.0);
     }
