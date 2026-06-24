@@ -49,8 +49,7 @@ public class Loan {
 
     public boolean isLate(LocalDate currentDate) {
         // TODO: verificar se o empréstimo está atrasado
-        LocalDate dateToCheck = (this.returnDate != null) ? this.returnDate : currentDate;
-        return dateToCheck.isAfter(this.expectedReturnDate);
+        return getReferenceDate(currentDate).isAfter(this.expectedReturnDate);
     }
 
     public long daysLate(LocalDate currentDate) {
@@ -58,13 +57,15 @@ public class Loan {
         if (!isLate(currentDate)) {
             return 0;
         }
-        LocalDate dateToCheck = (this.returnDate != null) ? this.returnDate : currentDate;
-        return ChronoUnit.DAYS.between(this.expectedReturnDate, dateToCheck);
+        return ChronoUnit.DAYS.between(this.expectedReturnDate, getReferenceDate(currentDate));
     }
 
     public double calculateFine(LocalDate currentDate) {
         // TODO: calcular multa simbólica por atraso (ex: R$0,50 por dia)
-        long atraso = daysLate(currentDate);
-        return atraso * 0.50;
+        return daysLate(currentDate) * 0.50;
+    }
+
+    private LocalDate getReferenceDate(LocalDate currentDate) {
+        return (this.returnDate != null) ? this.returnDate : currentDate;
     }
 }
