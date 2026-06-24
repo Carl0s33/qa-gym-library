@@ -1,6 +1,7 @@
 package br.edu.ifrn.qagym.model;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class Loan {
 
@@ -48,16 +49,22 @@ public class Loan {
 
     public boolean isLate(LocalDate currentDate) {
         // TODO: verificar se o empréstimo está atrasado
-        return false;
+        LocalDate dateToCheck = (this.returnDate != null) ? this.returnDate : currentDate;
+        return dateToCheck.isAfter(this.expectedReturnDate);
     }
 
     public long daysLate(LocalDate currentDate) {
         // TODO: calcular quantidade de dias de atraso
-        return 0;
+        if (!isLate(currentDate)) {
+            return 0;
+        }
+        LocalDate dateToCheck = (this.returnDate != null) ? this.returnDate : currentDate;
+        return ChronoUnit.DAYS.between(this.expectedReturnDate, dateToCheck);
     }
 
     public double calculateFine(LocalDate currentDate) {
         // TODO: calcular multa simbólica por atraso (ex: R$0,50 por dia)
-        return 0.0;
+        long atraso = daysLate(currentDate);
+        return atraso * 0.50;
     }
 }
